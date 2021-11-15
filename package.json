@@ -4,8 +4,7 @@
   "description": "Get information about movies and their directors",
   "main": "index.js",
   "scripts": {
-    "prepare": "npm install",
-    "start": "node index.js"
+    "start": "sudo node index.js"
   },
   "author": "Alexandre Moreau <amoreau@coveo.com>",
   "license": "Apache License 2.0",
