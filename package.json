@@ -4,10 +4,11 @@
   "description": "Get information about movies and their directors",
   "main": "index.js",
   "scripts": {
+    "prepare": "npm install",
     "start": "node index.js"
   },
-  "author": "amoreau",
-  "license": "Apache 2.0",
+  "author": "Alexandre Moreau <amoreau@coveo.com>",
+  "license": "Apache License 2.0",
   "dependencies": {
     "express": "^4.17.1"
   }
