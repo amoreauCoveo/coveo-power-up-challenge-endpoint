@@ -3,7 +3,7 @@ const movies = require("./moviesshort.json");
 const detailedmovies = require("./moviesdetailed.json");
 const directors = require("./directors.json");
 const app = express();
-const port = 80;
+const port = 3000;
 const responseSizeLimit = 20;
 
 
