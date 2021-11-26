@@ -49,6 +49,31 @@ app.get('/movies/:movieid', (req, res) => {
   res.send(response);
 })
 
+app.get('/directors', (req, res) => {
+  if (!req.query["per_page"]) {
+    req.query["per_page"] = responseSizeLimit;
+  }
+  const parsedPerPage = parseStringToInt(req.query["per_page"]);
+  if (parsedPerPage < 1 || parsedPerPage > responseSizeLimit || parsedPerPage == "NaN") {
+    req.query["per_page"] = responseSizeLimit;
+  }
+  if (!req.query["page"]) {
+    req.query["page"] = 1;
+  }
+  const parsedPage = parseStringToInt(req.query["page"]);
+  if (parsedPage < 1 || parsedPage == "NaN") {
+    req.query["page"] = 1;
+  }
+
+  const indexToStart = (req.query["page"] -1) * req.query["per_page"];
+  const indexToStop = req.query["page"] * req.query["per_page"]
+  let response = directors.slice(indexToStart, indexToStop);
+  if (!response.length) {
+    response = [];
+  }
+  res.send(response)
+})
+
 app.get('/directors/:directorid', (req, res) => {
   const directorids = req.params.directorid.split(";");
   const directorsToReturn = [];
