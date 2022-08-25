@@ -1,6 +1,7 @@
 deprecated/
 getnames/
 modscripts/
+site-creation/
 node_modules/
 config.json
 package-lock.json
