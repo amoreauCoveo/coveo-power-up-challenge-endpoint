@@ -1,0 +1,14 @@
+{
+  "name": "coveomovieapi",
+  "version": "1.0.0",
+  "description": "Get information about movies and their directors",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Alexandre Moreau <amoreau@coveo.com>",
+  "license": "Apache License 2.0",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
