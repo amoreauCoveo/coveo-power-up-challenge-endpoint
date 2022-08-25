@@ -1,7 +1,7 @@
 {
-  "name": "coveomovieapi",
+  "name": "coveopowerupchallenge",
   "version": "1.0.0",
-  "description": "Get information about movies and their directors",
+  "description": "Site and API used for the Power Up Challenge",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
