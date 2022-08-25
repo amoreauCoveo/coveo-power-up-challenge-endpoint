@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="http://fonts.cdnfonts.com/css/roboto" rel="stylesheet">
+        <style>
+            body {
+                padding: 0 15% 0 15%;
+                font-size: 18px;
+                font-family: 'Roboto', sans-serif;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Coveo Power Up Challenge Website and API</h1>
+        <div>Welcome to the Coveo Power Up Challenge website and API. This site presents resources used during the Coveo Power Up Challenge, an event meant to help you learn how Coveo works by building a full Coveo experience.</div>
+        <div>For more information, go on <a href="https://levelup.coveo.com/">Coveo Level Up</a> and register for the next event.</div>
+        <div>This page covers the available features of this site.</div>
+        <h2>Movies and Directors</h2>
+        <h3>Movies Listing API</h3>
+        <div>Movies can be listed by calling the <code>/movies</code> endpoint.</div>
+        <div>The endpoint shows the top 1,000 movies where English is one of the languages spoken.</div>
+        <div>By default, calling the endpoint returns the first 20 results. The results are ordered by the number of votes multiplied by the average vote. This generally means that the most popular and liked movies are shown first.</div>
+        <div>You can change the page by appending <code>?page=n</code> to your endpoint, where <code>n</code> is the page you want to fetch.</div>
+        <div>You can also append <code>?per_page</code> to the endpoint to get fewer results per request. The maximum (and default) value is 20.</div>
+        <div>For example, you can call <code>/movies?page=3&per_page=10</code>, which would give you the results 21 to 30.</div>
+        <div>Some movies have their French name and description available. You can get them by adding <code>?lang=fr</code> to the request.</div>
+        <div>For example, calling <code>/movies?lang=fr&page=3&per_page=10</code> returns results 21 to 30 of the movies in French.</div>
+        <h3>Movie Details API</h3>
+        <div>You can call the <code>/movies/movieid</code> endpoint, where <code>movieid</code> is replaced by a valid movie id, to get more information about a movie.</div>
+        <div>For example, calling <code>/movies/tt0468569</code> will give you more information on the movie The Dark Knight.</div>
+        <h3>Directors Listing API</h3>
+        <div>Movies can be listed by calling the <code>/directors</code> endpoint.</div>
+        <div>The endpoint shows all directors for the top 1,000 movies. The directors are not ordered in any particular way.</div>
+        <div>By default, calling the endpoint returns the first 20 results.</div>
+        <div>You can change the page by appending <code>?page=n</code> to your endpoint, where <code>n</code> is the page you want to fetch.</div>
+        <div>You can also append <code>?per_page</code> to the endpoint to get fewer results per request. The maximum (and default) value is 20.</div>
+        <div>For example, you can call <code>/directors?page=3&per_page=10</code>, which would give you the results 21 to 30.</div>
+        <h3>Director Details API</h3>
+        <div>You can call the <code>/directors/directorid</code> endpoint, where <code>directorid</code> is replaced by a valid director id.</div>
+        <div>For example, calling <code>/directors/nm0634240</code> will give you details about Christopher Nolan.</div>
+        <div>Importantly, calling the director details endpoint always returns an array. That is because you can call multiple directors at once, separated by semi-colons(<code>;</code>).</div>
+        <div>For example, calling <code>/directors/nm0905154;nm0905152</code> returns both Wachowski's.</div>
+        <h2>Pokémon</h2>
+        <h3>Pokémon Listing API</h3>
+        <div>Pokémon can be listed by calling the <code>/pokemon</code> endpoint.</div>
+        <div>The endpoint shows all Pokémon from Generations 1 to 8. It does not contain alternate forms (such as Alolan/Galar forms or Mega Evolutions).</div>
+        <div>By default, calling the endpoint returns the first 20 results. The results are ordered by National Pokédex number.</div>
+        <div>You can change the page by appending <code>?page=n</code> to your endpoint, where <code>n</code> is the page you want to fetch.</div>
+        <div>You can also append <code>?per_page</code> to the endpoint to get fewer results per request. The maximum (and default) value is 20.</div>
+        <div>For example, you can call <code>/pokemon?page=3&per_page=10</code>, which would give you the results 21 to 30.</div>
+        <div>The first generation also has the Pokémon in French available. You can get them by adding <code>?lang=fr</code> to the request.</div>
+        <div>For example, calling <code>/pokemon?lang=fr&page=3&per_page=10</code> returns Pokémon 21 to 30 in French.</div>
+        <h3>Pokémon Details API</h3>
+        <div>You can call the <code>/pokemon/pokemonnumber</code> endpoint, where <code>pokemonnumber</code> is replaced by the Pokémon number in the National Pokédex, to get information on a specific Pokémon.</div>
+        <div>For example, calling <code>/pokemon/1</code> or <code>/pokemon/001</code> will give you information on Bulbasaur.</div>
+        <h3>Pokémon Item Listing API</h3>
+        <div>Pokémon items can be listed by calling the <code>/pokemon-items</code> endpoint.</div>
+        <div>The endpoint shows a non-exhaustive list of 404 items from a variety of Pokémon games.</div>
+        <div>By default, calling the endpoint returns the first 20 results. The results are in no particular order. Each item is assigned an id, from 1 to 404.</div>
+        <div>You can change the page by appending <code>?page=n</code> to your endpoint, where <code>n</code> is the page you want to fetch.</div>
+        <div>You can also append <code>?per_page</code> to the endpoint to get fewer results per request. The maximum (and default) value is 20.</div>
+        <div>For example, you can call <code>/pokemon-items?page=3&per_page=10</code>, which would give you the results 21 to 30.</div>
+        <h3>Pokémon Item Details API</h3>
+        <div>You can call the <code>/pokemon-item/itemid</code> endpoint, where <code>itemid</code> is replaced by the id of an item, to get information on a specific Pokémon item.</div>
+        <div>For example, calling <code>/pokemon-item/1</code> will give you information on the Master Ball.</div>
+        <h3>Pokémon Website</h3>
+        <div>There is a listing of Pokémon available at <a href="http://coveo-power-up-challenge.herokuapp.com/web/pokemon">http://coveo-power-up-challenge.herokuapp.com/web/pokemon</a>.</div>
+        <div>It lists all 898 Pokémon from Generations 1 to 8, and includes a link to their individual pages, showing detailed information on the Pokémon.</div>
+        <div>Individual pages follow the pattern <code>http://coveo-power-up-challenge.herokuapp.com/web/pokemon/id/pokemonnumber.html</code>, where <code>pokemonnumber</code> is replaced by the Pokémon National Pokédex number.</div>
+        <div>A sitemap of all Pokémon pages is available here: <a href="http://coveo-power-up-challenge.herokuapp.com/web/pokemon/pokemonsitemap.xml">http://coveo-power-up-challenge.herokuapp.com/web/pokemon/pokemonsitemap.xml</a></div>
+        <div>The website also contains pages for Pokémon items, showing detailed information on the Pokémon item.</div>
+        <div>Individual pages follow the pattern <code>http://coveo-power-up-challenge.herokuapp.com/web/pokemon/item/itemid.html</code>, where <code>itemid</code> is replaced by the Pokémon item id.</div>
+        <div>A sitemap of all Pokémon item pages is available here: <a href="http://coveo-power-up-challenge.herokuapp.com/web/pokemon/itemsitemap.xml">http://coveo-power-up-challenge.herokuapp.com/web/pokemon/itemsitemap.xml</a></div>
+    </body>
+</html>

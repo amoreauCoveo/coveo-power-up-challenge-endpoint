@@ -1,0 +1,109 @@
+body.darkmode {
+    background-color: #451C5C;
+    color: white;
+    font-family: 'Lora', serif;
+    margin: 0px;
+}
+
+.darkmode .CoveoQuerySummary, .darkmode .CoveoResult, .darkmode .CoveoResult a.CoveoResultLink, a.CoveoResultLink:hover, .darkmode .CoveoFieldValue .coveo-clickable, span.coveo-checkbox-span-label, .CoveoTab p, .darkmode .coveo-dynamic-facet-header-title {
+    color: white;
+    font-family: 'Lora', serif;
+}
+
+.coveo-card-layout.CoveoResult {
+    border: none;
+    width: 200px;
+    margin: 10px 0 10px 0;
+}
+
+.darkmode .CoveoDynamicFacet, .darkmode .CoveoDynamicFacetRange {
+    background: #451C5C;
+    background-color:#451C5C
+}
+
+.CoveoSearchButton {
+    background-color: white;
+}
+
+.coveo-tab-section {
+    background-color: #451C5C;
+}
+
+h1 {
+    font-size: 3em;
+}
+
+header {
+    background-color: #2E45BA;
+}
+
+.banner {
+    padding: 1em;
+}
+
+.CoveoTab.coveo-selected, .CoveoTab.coveo-selected:hover {
+    border-bottom: solid;
+    border-width: 5px;
+    border-color: white;
+}
+
+.darkmode .coveo-dynamic-facet-show-more, .darkmode .coveo-dynamic-facet-show-less {
+    color: #E5E8E8;
+}
+
+.coveo-dynamic-facet-search .coveo-checkbox-span-label {
+    color: #282829;
+}
+
+.darkmode .CoveoResultLink.CoveoExcerpt, .CoveoResultLink.CoveoExcerpt:hover {
+    color: white;
+    font-family: 'Lora', serif;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.darkmode a.CoveoResultLink:hover, .CoveoResultLink:hover {
+    text-decoration: none;
+}
+
+.movie-genres {
+    font-size: 12px;
+    background-color:#282829;
+}
+
+.banner {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+}
+
+.banner-title {
+    float: left;
+}
+
+.trivia {
+    float: right;
+    width: 50%;
+    border: none;
+    border-radius: 10px;
+    background-color: #00634F;
+    padding: 10px;
+}
+
+.darkmode .CoveoCustomSortDropdown {
+    float: right;
+    margin-left: 20px;
+}
+
+.darkmode .CoveoSearchInterface .coveo-search-section {
+    max-width: 1200px;
+}
+
+.darkmode .coveo-custom-sort-dropdown-text {
+    color: white;
+}
+
+.darkmode .CoveoSearchInterface .coveo-search-section {
+    align-items: end;
+}

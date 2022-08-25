@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+  <pre><code>{
+  "Services": [
+    {
+      "Url": "https://coveo-power-up-challenge.herokuapp.com",
+      "Paging": {
+        "PageSize": 20,
+        "OffsetStart": 1,
+        "OffsetType": "page",
+        "Parameters": {
+          "Limit": "per_page",
+          "Offset": "page"
+         }
+      },
+      "Endpoints": [
+        {
+          "Path": "/movies",
+          "Method": "GET",
+          "ItemType": "Movies",
+          "Uri": "%[link]",
+          "ClickableUri": "%[link]",
+          "Title": "%[title]",
+          "Body": "%[description]",
+          "Metadata": {
+            "moviereleaseyear": "%[year]",
+            "moviereleasedate": "%[datepublished]",
+            "moviegenres": "%[genres[*]]",
+            "movieduration": "%[duration]",
+            "moviecountries": "%[countries[*]]",
+            "movielanguages": "%[languages[*]]",
+            "moviedirectors": "%[directors[*].name]",
+            "moviebudget": "%[budget]",
+            "moviescore": "%[score]",
+            "movieid": "%[id]",
+            "thumbnailurl": "%[image]",
+          }
+        }
+      ]
+    }
+  ]
+}</code></pre>
+</body>
+
+</html>

@@ -1,0 +1,149 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Coveo Movie Search</title>
+    <meta name="description" content="Coveo Movie Search page created as a demo for the Power Up Challenge">
+    <meta name="author" content="Alex Moreau">
+    <link rel="shortcut icon" href="./src/favicon.ico" />
+    <script src="https://static.cloud.coveo.com/searchui/v2.10091/js/CoveoJsSearch.Lazy.min.js"></script>
+    <script src="https://static.cloud.coveo.com/searchui/v2.10091/js/templates/templates.js"></script>
+    <script src="./src/script.js"></script>
+    <script src="https://unpkg.com/@coveops/sort-dropdown@latest/dist/index.min.js"></script>
+    <link rel="stylesheet" href="./src/sortdropdown.css" />
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const root = document.querySelector('#search');
+            Coveo.SearchEndpoint.configureCloudV2Endpoint(
+                "amoreaupuporg7rhcsvsg",
+                "xxb4ca14a7-177c-4e88-922a-7994a4a126ce"
+            );
+
+            Coveo.init(root);
+        });
+    </script>
+    <link rel="stylesheet" href="https://static.cloud.coveo.com/searchui/v2.10091/css/CoveoFullSearch.min.css" />
+    <link rel="stylesheet" href="./src/style.css" />
+    <link rel="stylesheet" href="./src/card.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@500&display=swap" rel="stylesheet">
+</head>
+
+<body class="darkmode">
+    <header>
+        <div class="banner">
+            <div class="banner-title">
+                <h1>Coveo&Chill</h1>
+                <div class="banner-what-to-watch">
+                    <h2>What would you like to watch?</h2>
+                </div>
+            </div>
+            <div class="trivia">
+                <div class="didyouknow"><b>Did you know?</b></div>
+                <div id="triviaquote">George Lucas's dog inspired two characters from his movies. His dog's name is
+                    Indiana (like Indiana Jones), and its size in the front seat of his car inspired the creation of
+                    Chewbacca from Star Wars.</div>
+            </div>
+        </div>
+    </header>
+    <div class="CoveoSearchInterface" id="search" data-enable-history="true">
+        <div class="CoveoAnalytics" data-search-hub="Movie Search"></div>
+        <div class="coveo-tab-section">
+            <div class="CoveoTab" data-id="Movies" data-caption="Movies" data-expression="@source=Movies"></div>
+            <div class="CoveoTab" data-id="Directors" data-caption="Directors" data-expression="@source=Directors">
+            </div>
+        </div>
+        <div class="coveo-search-section">
+            <div class="CoveoSearchbox" data-placeholder="Search..."></div>
+            <div class="CoveoCustomSortDropdown" data-display-caption="true">
+                <span class="CoveoSort" data-sort-criteria="relevancy" data-caption="Relevance"></span>
+                <span class="CoveoSort" data-caption="Score" data-sort-criteria="@moviescore descending" data-tab="Movies"></span>
+                <span class="CoveoSort" data-sort-criteria="@moviereleasedate descending"
+                    data-caption="Release Date (Newest)" data-tab="Movies"></span>
+                <span class="CoveoSort" data-sort-criteria="@moviereleasedate ascending"
+                    data-caption="Release Date (Oldest)" data-tab="Movies"></span>
+                <span class="CoveoSort" data-sort-criteria="@directorbirthdate ascending" data-caption="Age (Oldest)" data-tab="Directors"></span>
+                <span class="CoveoSort" data-sort-criteria="@directorbirthdate descending" data-caption="Age (Youngest)" data-tab="Directors"></span>
+            </div>
+        </div>
+        <div class="coveo-main-section">
+            <div class="coveo-facet-column">
+                <div class="CoveoDynamicFacet" data-title="Genre" data-field="@moviegenre"
+                    data-value-caption='{"Action": "👊 Action", "Adventure": "🌎 Adventure", "Animation": "🎨 Animation", "Biography": "📖 Biography", "Comedy": "🤡 Comedy", "Crime": "🚔 Crime", "Drama": "🎭 Drama", "Family": "👪 Family", "Fantasy": "🧙‍♂️ Fantasy", "Film-Noir": "🕵️‍♂️Film Noir", "History": "🤴 History", "Horror": "👻 Horror", "Music": "🎵 Music", "Musical": "🎼 Musical", "Mystery": "🔍 Mystery", "Romance": "💖 Romance", "Sci-Fi": "👽 Science Fiction", "Sport": "🏀 Sport", "Thriller": "🔪 Thriller", "War": "💣 War", "Western": "🤠 Western"}'>
+                </div>
+                <div class="CoveoDynamicFacetRange" data-title="Duration (minutes)" data-field="@movieduration"
+                    data-ranges="[{ &quot;start&quot; : 0 , &quot;end&quot; : 90 },{ &quot;start&quot; : 91 , &quot;end&quot; : 120 },{ &quot;start&quot; : 121 , &quot;end&quot; : 150 }, { &quot;start&quot; : 151 , &quot;end&quot; : 180 }, { &quot;start&quot; : 181 , &quot;end&quot; : 300 },{ &quot;start&quot; : 301, &quot;end&quot; : 100000 }]"
+                    data-number-of-values=""></div>
+                <div class="CoveoDynamicFacetRange" data-sort-order="descending" data-title="Decade"
+                    data-field="@moviereleasedate"
+                    data-ranges="[{ &quot;start&quot; : &quot;1800/01/01&quot; , &quot;end&quot; : &quot;1929/12/31&quot;, &quot;label&quot;: &quot;Very Old&quot; }, { &quot;start&quot; : &quot;1930/01/01&quot; , &quot;end&quot; : &quot;1959/12/31&quot;, &quot;label&quot;: &quot;Pre-1960&quot; }, { &quot;start&quot; : &quot;1960/01/01&quot; , &quot;end&quot; : &quot;1969/12/31&quot;, &quot;label&quot;: &quot;1960&#x27;s&quot; }, { &quot;start&quot; : &quot;1970/01/01&quot; , &quot;end&quot; : &quot;1979/12/31&quot;, &quot;label&quot;: &quot;1970&#x27;s&quot; },{ &quot;start&quot; : &quot;1980/01/01&quot; , &quot;end&quot; : &quot;1989/12/31&quot;, &quot;label&quot;: &quot;1980&#x27;s&quot; },{ &quot;start&quot; : &quot;1990/01/01&quot; , &quot;end&quot; : &quot;1999/12/31&quot;, &quot;label&quot;: &quot;1990&#x27;s&quot; },{ &quot;start&quot; : &quot;2000/01/01&quot; , &quot;end&quot; : &quot;2009/12/31&quot;, &quot;label&quot;: &quot;2000&#x27;s&quot; },{ &quot;start&quot; : &quot;2010/01/01&quot; , &quot;end&quot; : &quot;2021/12/31&quot;, &quot;label&quot;: &quot;2010&#x27;s&quot; }]"
+                    data-value-format="date" data-number-of-values=""></div>
+                <div class="CoveoDynamicFacet" data-title="Country" data-field="@moviecountry"
+                    data-collapsed-by-default='true'></div>
+                <div class="CoveoDynamicFacet" data-title="Language" data-field="@movielanguage"
+                    data-collapsed-by-default='true'></div>
+                <div class="CoveoDynamicFacet" data-title="Country" data-field="@directorcountry"></div>
+            </div>
+            <div class="coveo-results-column">
+                <div class="CoveoTriggers"></div>
+                <div class="CoveoBreadcrumb"></div>
+                <div class="CoveoDidYouMean"></div>
+                <div class="coveo-summary-section">
+                    <div class="CoveoQuerySummary" data-only-display-search-tips="true">
+                        <div class="coveo-show-if-no-results"></div>
+                    </div>
+                </div>
+                <div class="CoveoResultList cards" data-layout="card" data-enable-infinite-scroll="true">
+                    <script id="Movies" class="result-template" type="text/html" data-layout="card"
+                        data-field-source="Movies">
+                        <div class="card">
+                            <span class="CoveoFieldValue card-image" data-field="@movieimage" data-html-value="true" data-helper="image"></span>
+                            <div class="card-desc">
+                                <a class="CoveoResultLink" style="font-size: 18px; color: white"></a>
+                                <div class="CoveoFieldValue" data-field="@moviereleaseyear" style="font-size: 12px"></div>
+                                <div class="movie-genres">
+                                    <div class="CoveoFieldValue" data-field="@moviegenre"></div>
+                                </div>
+                                <div class="moviescore">
+                                    <span>Critic score: </span><span class="CoveoFieldValue" data-field="@moviescore"></span><span>%</span>
+                                </div>
+                                <span class="CoveoFieldValue" data-field="@movieduration"></span> <span>minutes</span>
+                                <div class="CoveoResultLink">
+                                    <a class="CoveoExcerpt CoveoResultLink"></a>
+                                </div>
+                                <div>
+                                    <b><span>Director(s): </span></b><span class="CoveoFieldValue" data-field="@moviedirector"></span>
+                                </div>
+                                <div>
+                                    <b><span>Writer(s): </span></b><span class="CoveoFieldValue" data-field="@moviewriters"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </script>
+                    <script id="Directors" class="result-template" type="text/html" data-layout="card"
+                        data-field-source="Directors">
+                    <div class="card">
+                        <a class="CoveoResultLink" style="font-size: 18px; color: white; padding-bottom: 10px"></a>
+                        <span class="CoveoFieldValue card-image" data-field="@directorimage" data-html-value="true" data-helper="image" data-helper-options-height="300" data-helper-options-width="202"></span>
+                        <div class="card-desc">
+                            <a class="CoveoResultLink" style="font-size: 18px"></a>
+                            <div class="CoveoFieldValue" style="font-size:12px" data-field="@directorbirthdate" data-helper="date" data-helper-options-use-today-yesterday-and-tomorrow="false" data-helper-options-use-weekday-if-this-week="false" data-helper-options-omit-year-if-current-one="false" data-helper-options-include-time-if-today="false" data-helper-options-include-time-if-this-week="false" data-helper-options-predefined-format="dd MMMM  YYYY"></div>
+                            <div style="padding: 5px;">
+                                <b>Known for: </b>
+                                <div class="CoveoFieldValue" data-field="@directormoviesname" data-split-values="true"></div>
+                            </div>
+                            <div class="CoveoExcerpt"></div>
+                        </div>
+                    </div>
+                </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
