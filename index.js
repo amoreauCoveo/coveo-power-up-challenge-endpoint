@@ -7,12 +7,12 @@ const pokemonfr = require("./pokemonfr.json");
 const pokemonitems = require("./pokemonitems.json");
 const path = require("path");
 const directors = require("./directors.json");
-const fs = require("fs");
+//const fs = require("fs");
 const app = express();
 const port = process.env.PORT || 3000;
 const responseSizeLimit = 20;
 
-const docs = new Promise((resolve, reject) => {
+/*const docs = new Promise((resolve, reject) => {
   fs.readFile("./index.html", "utf-8", function (err, data) {
     if (err) {
       console.log("Can't read file");
@@ -46,7 +46,7 @@ const pokconfig = new Promise((resolve, reject) => {
       resolve(data);
     }
   })
-})
+})*/
 
 function parseStringToInt(str) {
   const parsed = parseInt(str);
@@ -58,11 +58,12 @@ function parseStringToInt(str) {
 }
 
 app.get('/', (req, res) => {
-  docs.then(
+  /*docs.then(
     doc => {
       res.send(doc);
     }
-  )
+  )*/
+  res.send({"message": "Hello World"})
 })
 
 
