@@ -7,46 +7,9 @@ const pokemonfr = require("./pokemonfr.json");
 const pokemonitems = require("./pokemonitems.json");
 const path = require("path");
 const directors = require("./directors.json");
-//const fs = require("fs");
 const app = express();
 const port = process.env.PORT || 3000;
 const responseSizeLimit = 20;
-
-/*const docs = new Promise((resolve, reject) => {
-  fs.readFile("./index.html", "utf-8", function (err, data) {
-    if (err) {
-      console.log("Can't read file");
-      reject(err);
-    } else {
-      console.log("Read Docs");
-      resolve(data);
-    }
-  })
-})
-
-const config = new Promise((resolve, reject) => {
-  fs.readFile("./config.html", "utf-8", function (err, data) {
-    if (err) {
-      console.log("Can't read file", "IMDb");
-      reject(err);
-    } else {
-      console.log("Read IMDb Config");
-      resolve(data);
-    }
-  })
-})
-
-const pokconfig = new Promise((resolve, reject) => {
-  fs.readFile("./pokemonconfig.html", "utf-8", function (err, data) {
-    if (err) {
-      console.log("Can't read file", "Pokemon");
-      reject(err);
-    } else {
-      console.log("Read Pokemon Config");
-      resolve(data);
-    }
-  })
-})*/
 
 function parseStringToInt(str) {
   const parsed = parseInt(str);
@@ -58,12 +21,7 @@ function parseStringToInt(str) {
 }
 
 app.get('/', (req, res) => {
-  /*docs.then(
-    doc => {
-      res.send(doc);
-    }
-  )*/
-  res.send({"message": "Hello World"})
+  res.sendFile(__dirname + "/index.html");
 })
 
 
@@ -76,19 +34,11 @@ app.get('/power-up/demo/', (req, res) => {
 app.use('/web', express.static(path.join(__dirname + "/web/")))
 
 app.get('/power-up/config/codeless', (req, res) => {
-  config.then(
-    qconfig => {
-      res.send(qconfig);
-    }
-  )
+  res.sendFile(__dirname + "/config.html");
 })
 
 app.get('/power-up/config/pokemon/codeless', (req, res) => {
-  pokconfig.then(
-    pconfig => {
-      res.send(pconfig);
-    }
-  )
+  res.sendFile(__dirname + "/pokemonconfig.html");
 })
 
 app.get('/movies', (req, res) => {
