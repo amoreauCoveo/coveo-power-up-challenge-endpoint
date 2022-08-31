@@ -264,3 +264,5 @@ app.get('/pokemon-items/:itemid', (req, res) => {
 app.listen(port, () => {
   console.log(`Listings available at http://localhost:${port}`)
 })
+
+module.exports = app;
