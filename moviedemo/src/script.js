@@ -32,4 +32,16 @@ const triviaToShow = trivia[Math.floor(Math.random() * trivia.length)];
 
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelector("#triviaquote").innerHTML = triviaToShow;
+
+    const root = document.querySelector("#search");
+    Coveo.$$(root).on("doneBuildingQuery", function (e, args) {
+        let currentQuery = args.queryBuilder.expression.parts[0];
+        if (currentQuery) {
+            currentQuery = currentQuery.toLowerCase();
+        }
+        console.log(currentQuery);
+        if (currentQuery == "goncharov" || currentQuery == "martin scorsese") {
+            args.queryBuilder.constantExpression.parts[0] += " OR @source=secret";
+        }
+    })
 });
