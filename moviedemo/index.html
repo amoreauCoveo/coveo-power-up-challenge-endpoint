@@ -146,7 +146,7 @@
                     <atomic-did-you-mean></atomic-did-you-mean>
                 </atomic-layout-section>
                 <atomic-result-list display="grid" class="cards">
-                    <atomic-result-template must-match-source="Movies">
+                    <atomic-result-template must-match-source="Movies, secret">
                         <template>
                             <style>
                                 body {
@@ -222,7 +222,7 @@
                                 <div class="card-img">
                                     <atomic-result-image field="movieimage" data-html-value="true" data-helper="image"
                                         data-helper-options-height="285"
-                                        data-helper-options-width="190"></atomic-result-image>
+                                        data-helper-options-width="190" style="height: 285px; width: 190px;"></atomic-result-image>
                                 </div>
                                 <div class="card-desc">
                                     <atomic-result-link class="CoveoResultLink"
