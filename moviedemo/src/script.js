@@ -32,7 +32,7 @@ const triviaToShow = trivia[Math.floor(Math.random() * trivia.length)];
 
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelector("#triviaquote").innerHTML = triviaToShow;
-
+/*
     const root = document.querySelector("#search");
     Coveo.$$(root).on("doneBuildingQuery", function (e, args) {
         let currentQuery = args.queryBuilder.expression.parts[0];
@@ -44,4 +44,5 @@ document.addEventListener("DOMContentLoaded", () => {
             args.queryBuilder.constantExpression.parts[0] += " OR @source=secret";
         }
     })
+    */
 });

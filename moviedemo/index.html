@@ -9,28 +9,72 @@
     <meta name="description" content="Coveo Movie Search page created as a demo for the Power Up Challenge">
     <meta name="author" content="Alex Moreau">
     <link rel="shortcut icon" href="./src/favicon.ico" />
-    <script src="https://static.cloud.coveo.com/searchui/v2.10091/js/CoveoJsSearch.Lazy.min.js"></script>
-    <script src="https://static.cloud.coveo.com/searchui/v2.10091/js/templates/templates.js"></script>
     <script src="./src/script.js"></script>
-    <script src="https://unpkg.com/@coveops/sort-dropdown@latest/dist/index.min.js"></script>
-    <link rel="stylesheet" href="./src/sortdropdown.css" />
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const root = document.querySelector('#search');
-            Coveo.SearchEndpoint.configureCloudV2Endpoint(
-                "amoreaupuporg7rhcsvsg",
-                "xxb4ca14a7-177c-4e88-922a-7994a4a126ce"
-            );
-
-            Coveo.init(root);
-        });
-    </script>
-    <link rel="stylesheet" href="https://static.cloud.coveo.com/searchui/v2.10091/css/CoveoFullSearch.min.css" />
+    <script src="./src/tab.js"></script>
+    <script type="module" src="https://static.cloud.coveo.com/atomic/v2/atomic.esm.js"></script>
+    <link rel="stylesheet" href="https://static.cloud.coveo.com/atomic/v2/themes/coveo.css" />
     <link rel="stylesheet" href="./src/style.css" />
     <link rel="stylesheet" href="./src/card.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:wght@500&display=swap" rel="stylesheet">
+    <script type="module">
+        import {
+            loadSearchAnalyticsActions,
+            loadSearchActions,
+        } from 'https://static.cloud.coveo.com/atomic/v2/headless/headless.esm.js';
+        (async () => {
+            await customElements.whenDefined("atomic-search-interface");
+            const searchInterface = document.querySelector("#search");
+
+            await searchInterface.initialize({
+                accessToken: "xxb4ca14a7-177c-4e88-922a-7994a4a126ce",
+                organizationId: "amoreaupuporg7rhcsvsg",
+                preprocessRequest: (request, clientOrigin) => {
+                    if (clientOrigin == "searchApiFetch") {
+                        let body = JSON.parse(request.body);
+                        if (getCurrentTab() == "Movies") {
+                            if (body["q"].toLowerCase() == "goncharov" || body["q"].toLowerCase() == "martin scorsese") {
+                                console.log("modifying")
+                                body["aq"] = "@source==(\"Movies\", \"secret\")";
+                            } else {
+                                body["aq"] = "@source==Movies";
+                            }
+                        } else {
+                            body["aq"] = "@source==Directors";
+                        }
+                        body.numberOfResults = 20;
+                        body.tab = getCurrentTab();
+                        request.body = JSON.stringify(body);
+                    }
+                    return request;
+                }
+            });
+            searchInterface.executeFirstSearch();
+            searchInterface.i18n.addResourceBundle('en', 'translation', {
+                'n-more': "+{{value}}"
+            })
+            searchInterface.i18n.addResourceBundle('en', 'caption-moviegenre', { "Action": "👊 Action", "Adventure": "🌎 Adventure", "Animation": "🎨 Animation", "Biography": "📖 Biography", "Comedy": "🤡 Comedy", "Crime": "🚔 Crime", "Drama": "🎭 Drama", "Family": "👪 Family", "Fantasy": "🧙‍♂️ Fantasy", "Film-Noir": "🕵️‍♂️ Film Noir", "History": "🤴 History", "Horror": "👻 Horror", "Music": "🎵 Music", "Musical": "🎼 Musical", "Mystery": "🔍 Mystery", "Romance": "💖 Romance", "Sci-Fi": "👽 Science Fiction", "Sport": "🏀 Sport", "Thriller": "🔪 Thriller", "War": "💣 War", "Western": "🤠 Western" });
+
+            // This if for the tab functionality
+            var currentTab = "Movies";
+            function getCurrentTab() {
+                return currentTab;
+            }
+            const tabs = document.getElementsByClassName("tab");
+            for (i = 0; i < tabs.length; i++) {
+                tabs[i].addEventListener('click', function switchTab(tab) {
+                    document.querySelector(".selected-tab").classList.remove("selected-tab");
+                    currentTab = tab.target.id;
+                    document.querySelector(`#${currentTab}`).classList.add("selected-tab");
+                    const engine = searchInterface.engine;
+                    const { logSearchboxSubmit } = loadSearchAnalyticsActions(engine);
+                    const { executeSearch } = loadSearchActions(engine);
+                    engine.dispatch(executeSearch(logSearchboxSubmit()));
+                })
+            }
+        })();
+    </script>
 </head>
 
 <body class="darkmode">
@@ -50,100 +94,249 @@
             </div>
         </div>
     </header>
-    <div class="CoveoSearchInterface" id="search" data-enable-history="true">
-        <div class="CoveoAnalytics" data-search-hub="Movie Search"></div>
-        <div class="coveo-tab-section">
-            <div class="CoveoTab" data-id="Movies" data-caption="Movies" data-expression="@source=Movies"></div>
-            <div class="CoveoTab" data-id="Directors" data-caption="Directors" data-expression="@source=Directors">
-            </div>
+    <atomic-search-interface id="search"
+        fields-to-include='["movieimage", "moviereleaseyear", "moviegenre", "moviescore", "movieduration", "moviedirector", "moviewriters", "moviereleasedate", "directorimage", "directorbirthdate"]'
+        search-hub="Movie Search">
+        <div class="tab-container">
+            <div class="tab selected-tab" id="Movies">MOVIES</div>
+            <div class="tab" id="Directors">DIRECTORS</div>
         </div>
-        <div class="coveo-search-section">
-            <div class="CoveoSearchbox" data-placeholder="Search..."></div>
-            <div class="CoveoCustomSortDropdown" data-display-caption="true">
-                <span class="CoveoSort" data-sort-criteria="relevancy" data-caption="Relevance"></span>
-                <span class="CoveoSort" data-caption="Score" data-sort-criteria="@moviescore descending" data-tab="Movies"></span>
-                <span class="CoveoSort" data-sort-criteria="@moviereleasedate descending"
-                    data-caption="Release Date (Newest)" data-tab="Movies"></span>
-                <span class="CoveoSort" data-sort-criteria="@moviereleasedate ascending"
-                    data-caption="Release Date (Oldest)" data-tab="Movies"></span>
-                <span class="CoveoSort" data-sort-criteria="@directorbirthdate ascending" data-caption="Age (Oldest)" data-tab="Directors"></span>
-                <span class="CoveoSort" data-sort-criteria="@directorbirthdate descending" data-caption="Age (Youngest)" data-tab="Directors"></span>
-            </div>
-        </div>
-        <div class="coveo-main-section">
-            <div class="coveo-facet-column">
-                <div class="CoveoDynamicFacet" data-title="Genre" data-field="@moviegenre"
-                    data-value-caption='{"Action": "👊 Action", "Adventure": "🌎 Adventure", "Animation": "🎨 Animation", "Biography": "📖 Biography", "Comedy": "🤡 Comedy", "Crime": "🚔 Crime", "Drama": "🎭 Drama", "Family": "👪 Family", "Fantasy": "🧙‍♂️ Fantasy", "Film-Noir": "🕵️‍♂️Film Noir", "History": "🤴 History", "Horror": "👻 Horror", "Music": "🎵 Music", "Musical": "🎼 Musical", "Mystery": "🔍 Mystery", "Romance": "💖 Romance", "Sci-Fi": "👽 Science Fiction", "Sport": "🏀 Sport", "Thriller": "🔪 Thriller", "War": "💣 War", "Western": "🤠 Western"}'>
-                </div>
-                <div class="CoveoDynamicFacetRange" data-title="Duration (minutes)" data-field="@movieduration"
-                    data-ranges="[{ &quot;start&quot; : 0 , &quot;end&quot; : 90 },{ &quot;start&quot; : 91 , &quot;end&quot; : 120 },{ &quot;start&quot; : 121 , &quot;end&quot; : 150 }, { &quot;start&quot; : 151 , &quot;end&quot; : 180 }, { &quot;start&quot; : 181 , &quot;end&quot; : 300 },{ &quot;start&quot; : 301, &quot;end&quot; : 100000 }]"
-                    data-number-of-values=""></div>
-                <div class="CoveoDynamicFacetRange" data-sort-order="descending" data-title="Decade"
-                    data-field="@moviereleasedate"
-                    data-ranges="[{ &quot;start&quot; : &quot;1800/01/01&quot; , &quot;end&quot; : &quot;1929/12/31&quot;, &quot;label&quot;: &quot;Very Old&quot; }, { &quot;start&quot; : &quot;1930/01/01&quot; , &quot;end&quot; : &quot;1959/12/31&quot;, &quot;label&quot;: &quot;Pre-1960&quot; }, { &quot;start&quot; : &quot;1960/01/01&quot; , &quot;end&quot; : &quot;1969/12/31&quot;, &quot;label&quot;: &quot;1960&#x27;s&quot; }, { &quot;start&quot; : &quot;1970/01/01&quot; , &quot;end&quot; : &quot;1979/12/31&quot;, &quot;label&quot;: &quot;1970&#x27;s&quot; },{ &quot;start&quot; : &quot;1980/01/01&quot; , &quot;end&quot; : &quot;1989/12/31&quot;, &quot;label&quot;: &quot;1980&#x27;s&quot; },{ &quot;start&quot; : &quot;1990/01/01&quot; , &quot;end&quot; : &quot;1999/12/31&quot;, &quot;label&quot;: &quot;1990&#x27;s&quot; },{ &quot;start&quot; : &quot;2000/01/01&quot; , &quot;end&quot; : &quot;2009/12/31&quot;, &quot;label&quot;: &quot;2000&#x27;s&quot; },{ &quot;start&quot; : &quot;2010/01/01&quot; , &quot;end&quot; : &quot;2021/12/31&quot;, &quot;label&quot;: &quot;2010&#x27;s&quot; }]"
-                    data-value-format="date" data-number-of-values=""></div>
-                <div class="CoveoDynamicFacet" data-title="Country" data-field="@moviecountry"
-                    data-collapsed-by-default='true'></div>
-                <div class="CoveoDynamicFacet" data-title="Language" data-field="@movielanguage"
-                    data-collapsed-by-default='true'></div>
-                <div class="CoveoDynamicFacet" data-title="Country" data-field="@directorcountry"></div>
-            </div>
-            <div class="coveo-results-column">
-                <div class="CoveoTriggers"></div>
-                <div class="CoveoBreadcrumb"></div>
-                <div class="CoveoDidYouMean"></div>
-                <div class="coveo-summary-section">
-                    <div class="CoveoQuerySummary" data-only-display-search-tips="true">
-                        <div class="coveo-show-if-no-results"></div>
-                    </div>
-                </div>
-                <div class="CoveoResultList cards" data-layout="card" data-enable-infinite-scroll="true">
-                    <script id="Movies" class="result-template" type="text/html" data-layout="card"
-                        data-field-source="Movies,secret">
-                        <div class="card">
-                            <span class="CoveoFieldValue card-image" data-field="@movieimage" data-html-value="true" data-helper="image" data-helper-options-height="285" data-helper-options-width="190"></span>
-                            <div class="card-desc">
-                                <a class="CoveoResultLink" style="font-size: 18px; color: white"></a>
-                                <div class="CoveoFieldValue" data-field="@moviereleaseyear" style="font-size: 12px"></div>
-                                <div class="movie-genres">
-                                    <div class="CoveoFieldValue" data-field="@moviegenre"></div>
+        <atomic-search-layout style="max-width: 1300px; margin-left: auto; margin-right: auto; position: relative;">
+            <atomic-layout-section section="search">
+                <atomic-search-box></atomic-search-box>
+            </atomic-layout-section>
+            <atomic-layout-section section="facets">
+                <atomic-facet field="moviegenre" label="Genre" with-search="false" class="movie-tab"></atomic-facet>
+                <atomic-numeric-facet field="movieduration" label="Duration (minutes)" class="movie-tab">
+                    <atomic-numeric-range start="0" end="90"></atomic-numeric-range>
+                    <atomic-numeric-range start="91" end="120"></atomic-numeric-range>
+                    <atomic-numeric-range start="121" end="150"></atomic-numeric-range>
+                    <atomic-numeric-range start="151" end="180"></atomic-numeric-range>
+                    <atomic-numeric-range start="181" end="300"></atomic-numeric-range>
+                </atomic-numeric-facet>
+                <atomic-numeric-facet field="moviereleaseyear" label="Decade" class="movie-tab">
+                    <atomic-numeric-range start="2010" end="2020" label="2010's"></atomic-numeric-range>
+                    <atomic-numeric-range start="2000" end="2009" label="2000's"></atomic-numeric-range>
+                    <atomic-numeric-range start="1990" end="1999" label="1990's"></atomic-numeric-range>
+                    <atomic-numeric-range start="1980" end="1989" label="1980's"></atomic-numeric-range>
+                    <atomic-numeric-range start="1970" end="1979" label="1970's"></atomic-numeric-range>
+                    <atomic-numeric-range start="1960" end="1969" label="1960's"></atomic-numeric-range>
+                    <atomic-numeric-range start="1930" end="1959" label="Pre-1960"></atomic-numeric-range>
+                </atomic-numeric-facet>
+                <atomic-facet field="moviecountry" label="Country" is-collapsed="true" with-search="false"
+                    class="movie-tab"></atomic-facet>
+                <atomic-facet field="movielanguage" label="Language" is-collapsed="true" with-search="false"
+                    class="movie-tab"></atomic-facet>
+                <atomic-facet field="directorcountry" label="Country" class="director-tab" with-search="false"></atomic-facet>
+            </atomic-layout-section>
+            <atomic-layout-section section="main">
+                <atomic-layout-section section="status">
+                    <atomic-breadbox></atomic-breadbox>
+                    <atomic-query-summary></atomic-query-summary>
+                    <atomic-refine-toggle></atomic-refine-toggle>
+                    <atomic-sort-dropdown>
+                        <atomic-sort-expression label="Relevance" expression="relevancy"></atomic-sort-expression>
+                        <atomic-sort-expression label="Score" expression="moviescore descending"
+                            class="movie-tab"></atomic-sort-expression>
+                        <atomic-sort-expression label="Release Date (Newest)" expression="moviereleasedate descending"
+                            class="movie-tab"></atomic-sort-expression>
+                        <atomic-sort-expression label="Release Date (Oldest)" expression="moviereleasedate ascending"
+                            class="movie-tab"></atomic-sort-expression>
+                    </atomic-sort-dropdown>
+                    <atomic-did-you-mean></atomic-did-you-mean>
+                </atomic-layout-section>
+                <atomic-result-list display="grid" class="cards">
+                    <atomic-result-template must-match-source="Movies">
+                        <template>
+                            <style>
+                                body {
+                                    display: flex;
+                                    flex-direction: column;
+                                }
+
+                                .cards {
+                                    width: 100%;
+                                    display: flex;
+                                    flex-wrap: wrap;
+                                    justify-content: space-around;
+                                }
+
+                                .card {
+                                    position: relative;
+                                }
+
+                                .card .card-img {
+                                    width: 100%;
+                                    height: 100%;
+                                    object-fit: cover;
+                                    display: block;
+                                    position: relative;
+                                }
+
+                                .card-desc {
+                                    display: block;
+                                    position: absolute;
+                                    height: 0;
+                                    top: 0;
+                                    opacity: 0;
+                                    padding: 18px 8%;
+                                    overflow-y: scroll;
+                                    transition: 0.5s ease;
+                                    background-color: black;
+                                }
+
+                                .card-desc::-webkit-scrollbar {
+                                    width: 10px;
+                                }
+
+                                .card:hover .card-desc {
+                                    opacity: 1;
+                                    height: 100%;
+                                }
+
+                                .list-root {
+                                    width: 100%;
+                                    display: flex;
+                                    flex-wrap: wrap;
+                                    justify-content: space-around;
+                                }
+
+                                atomic-result-multi-value-text::part(result-multi-value-text-value) {
+                                    font-size: 10px;
+                                    display: contents;
+                                    white-space: nowrap;
+                                }
+
+                                atomic-result-multi-value-text::part(result-multi-value-text-value-more) {
+                                    font-size: 8px;
+                                    text-align: center;
+                                    margin: auto;
+                                    white-space: nowrap;
+                                }
+
+                                atomic-result-multi-value-text::part(result-multi-value-text-separator) {
+                                    display: none;
+                                }
+                            </style>
+                            <div class="card" style="position: relative">
+                                <div class="card-img">
+                                    <atomic-result-image field="movieimage" data-html-value="true" data-helper="image"
+                                        data-helper-options-height="285"
+                                        data-helper-options-width="190"></atomic-result-image>
                                 </div>
-                                <div class="moviescore">
-                                    <span>Critic score: </span><span class="CoveoFieldValue" data-field="@moviescore"></span><span>%</span>
-                                </div>
-                                <span class="CoveoFieldValue" data-field="@movieduration"></span> <span>minutes</span>
-                                <div class="CoveoResultLink">
-                                    <a class="CoveoExcerpt CoveoResultLink"></a>
-                                </div>
-                                <div>
-                                    <b><span>Director(s): </span></b><span class="CoveoFieldValue" data-field="@moviedirector"></span>
-                                </div>
-                                <div>
-                                    <b><span>Writer(s): </span></b><span class="CoveoFieldValue" data-field="@moviewriters"></span>
+                                <div class="card-desc">
+                                    <atomic-result-link class="CoveoResultLink"
+                                        style="font-size: 18px"></atomic-result-link>
+                                    <atomic-result-date class="CoveoFieldValue" field="moviereleasedate"
+                                        style="font-size: 12px" format="YYYY"></atomic-result-date>
+                                    <div class="movie-genres">
+                                        <atomic-result-multi-value-text class="CoveoFieldValue"
+                                            field="moviegenre"></atomic-result-multi-value-text>
+                                    </div>
+                                    <div class="moviescore">
+                                        <span>Critic score: </span><atomic-result-number class="CoveoFieldValue"
+                                            field="moviescore"></atomic-result-number><span>%</span>
+                                    </div>
+                                    <atomic-result-number class="CoveoFieldValue"
+                                        field="movieduration"></atomic-result-number>
+                                    <span>minutes</span>
+                                    <div class="CoveoResultLink">
+                                        <atomic-result-text field="excerpt"></atomic-result-text>
+                                    </div>
+                                    <div>
+                                        <b><span>Director(s): </span></b><atomic-result-multi-value-text
+                                            class="CoveoFieldValue"
+                                            field="moviedirector"></atomic-result-multi-value-text>
+                                    </div>
+                                    <div>
+                                        <b><span>Writer(s): </span></b><atomic-result-multi-value-text
+                                            class="CoveoFieldValue"
+                                            field="moviewriters"></atomic-result-multi-value-text>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </script>
-                    <script id="Directors" class="result-template" type="text/html" data-layout="card"
-                        data-field-source="Directors">
-                    <div class="card">
-                        <a class="CoveoResultLink" style="font-size: 18px; color: white; padding-bottom: 10px"></a>
-                        <span class="CoveoFieldValue card-image" data-field="@directorimage" data-html-value="true" data-helper="image" data-helper-options-height="300" data-helper-options-width="202"></span>
-                        <div class="card-desc">
-                            <a class="CoveoResultLink" style="font-size: 18px"></a>
-                            <div class="CoveoFieldValue" style="font-size:12px" data-field="@directorbirthdate" data-helper="date" data-helper-options-use-today-yesterday-and-tomorrow="false" data-helper-options-use-weekday-if-this-week="false" data-helper-options-omit-year-if-current-one="false" data-helper-options-include-time-if-today="false" data-helper-options-include-time-if-this-week="false" data-helper-options-predefined-format="dd MMMM  YYYY"></div>
-                            <div style="padding: 5px;">
-                                <b>Known for: </b>
-                                <div class="CoveoFieldValue" data-field="@directormoviesname" data-split-values="true"></div>
+                        </template>
+                    </atomic-result-template>
+                    <atomic-result-template must-match-source="Directors">
+                        <template>
+                            <style>
+                                body {
+                                    display: flex;
+                                    flex-direction: column;
+                                }
+
+                                .cards {
+                                    width: 100%;
+                                    display: flex;
+                                    flex-wrap: wrap;
+                                    justify-content: space-around;
+                                }
+
+                                .card {
+                                    position: relative;
+                                }
+
+                                .card .card-img {
+                                    width: 100%;
+                                    height: 100%;
+                                    object-fit: cover;
+                                    display: block;
+                                    position: relative;
+                                }
+
+                                .card-desc {
+                                    display: block;
+                                    position: absolute;
+                                    height: 0;
+                                    top: 0;
+                                    opacity: 0;
+                                    padding: 18px 8%;
+                                    overflow-y: scroll;
+                                    transition: 0.5s ease;
+                                    background-color: black;
+                                }
+
+                                .card-desc::-webkit-scrollbar {
+                                    width: 10px;
+                                }
+
+                                .card:hover .card-desc {
+                                    opacity: 1;
+                                    height: 100%;
+                                }
+
+                                .list-root {
+                                    width: 100%;
+                                    display: flex;
+                                    flex-wrap: wrap;
+                                    justify-content: space-around;
+                                }
+                            </style>
+                            <div class="card" style="position: relative; height: 285px; width: 190px;">
+                                <div class="card-img">
+                                    <atomic-result-image field="directorimage" data-html-value="true"
+                                        data-helper="image" data-helper-options-height="285"
+                                        data-helper-options-width="190" style="height: 285px; width: 190px;"></atomic-result-image>
+                                </div>
+                                <div class="card-desc">
+                                    <atomic-result-link class="CoveoResultLink"
+                                        style="font-size: 18px"></atomic-result-link>
+                                    <atomic-result-date class="CoveoFieldValue" field="directorbirthdate"
+                                        style="font-size: 12px" format="YYYY"></atomic-result-date>
+                                    <div class="CoveoResultLink">
+                                        <atomic-result-text field="excerpt"></atomic-result-text>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="CoveoExcerpt"></div>
-                        </div>
-                    </div>
-                </script>
-                </div>
-            </div>
-        </div>
-    </div>
+                        </template>
+                    </atomic-result-template>
+                </atomic-result-list>
+                <atomic-layout-section section="pagination">
+                    <atomic-load-more-results></atomic-load-more-results>
+                </atomic-layout-section>
+            </atomic-layout-section>
+        </atomic-search-layout>
+    </atomic-search-interface>
 </body>
 
 </html>

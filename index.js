@@ -31,6 +31,10 @@ app.get('/power-up/demo/', (req, res) => {
   res.sendFile(path.join(__dirname + "/moviedemo/", "/index.html"));
 })
 
+app.get('/power-up/legacy', (req, res) => {
+  res.sendFile(path.join(__dirname + "/moviedemo/", "/legacy.html"));
+})
+
 app.use('/web', express.static(path.join(__dirname + "/web/")))
 
 app.get('/power-up/config/codeless', (req, res) => {

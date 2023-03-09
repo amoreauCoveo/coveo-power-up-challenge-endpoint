@@ -1,3 +1,7 @@
+a {
+    color: white;
+    font-weight: bold;
+}
 body.darkmode {
     background-color: #451C5C;
     color: white;
@@ -106,4 +110,77 @@ header {
 
 .darkmode .CoveoSearchInterface .coveo-search-section {
     align-items: end;
+}
+
+:root {
+    --atomic-primary: #E5E8E8;
+    --atomic-background: #451C5C;
+    --atomic-on-background: white;
+    --atomic-neutral-light: #333357;
+    --atomic-neutral-dark: #E5E8E8;
+}
+
+atomic-facet::part(facet) {
+    background-color: #451C5C;
+}
+
+atomic-numeric-facet::part(facet) {
+    background-color: #451C5C;
+}
+
+atomic-facet::part(search-wrapper) {
+    color: #282829;
+}
+
+atomic-facet::part(search-icon) {
+    color: #2E45BA;
+}
+
+atomic-sort-dropdown::part(select) {
+    background-color: #451C5C;
+}
+
+atomic-search-box::part(submit-button) {
+    background-color: #2E45BA;
+    margin: -2px;
+}
+
+atomic-load-more-results::part(load-more-results-button) {
+    background-color: #2E45BA;
+}
+
+:host > ul {
+    display: block;
+}
+
+atomic-result-list::part(outline) {
+    padding: 0px;
+    border-radius: 0px;
+    box-shadow: none;
+}
+
+.tab-container {
+    height: 50px;
+    width:100%;
+    text-align: center;
+    border-bottom: 1px solid white;
+}
+
+.tab {
+    padding: 10px 10px 0px 10px;
+    display: inline-block;
+    height: 35px;
+    vertical-align: middle;
+}
+
+.tab:hover {
+    cursor: pointer;
+}
+
+.selected-tab {
+    border-bottom: 5px solid white;
+}
+
+.hidden {
+    display: none !important;
 }
