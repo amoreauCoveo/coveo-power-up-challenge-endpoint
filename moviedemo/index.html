@@ -44,7 +44,7 @@
                             body["aq"] = "@source==Directors";
                         }
                         body.numberOfResults = 20;
-                        body.tab = getCurrentTab();
+                        body["context"] = {"tab": getCurrentTab()}
                         request.body = JSON.stringify(body);
                     }
                     return request;
